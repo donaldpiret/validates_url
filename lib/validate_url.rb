@@ -20,7 +20,7 @@ module ActiveModel
         schemes = [*options.fetch(:schemes)].map(&:to_s)
         begin
           uri = Addressable::URI.parse(value)
-          unless uri && uri.host && schemes.include?(uri.scheme) && (!options.fetch(:no_local) || uri.host.include?('.'))
+          unless uri && value.include?(uri.origin + uri.path) && schemes.include?(uri.scheme) && (!options.fetch(:no_local) || uri.host.include?('.'))
             record.errors.add(attribute, options.fetch(:message), :value => value)
           end
         rescue Addressable::URI::InvalidURIError
